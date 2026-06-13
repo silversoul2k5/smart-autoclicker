@@ -74,7 +74,8 @@ class BackupViewModel @Inject constructor(
     fun createBackupRestorationFileSelectionIntent() =
         Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = MIME_TYPE_ZIP
+            type = MIME_TYPE_ANY
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(MIME_TYPE_ZIP, MIME_TYPE_ZIP_COMPRESSED, MIME_TYPE_OCTET_STREAM))
         }
 
     /**
@@ -250,3 +251,6 @@ data class BackupDialogUiState(
 
 /** Zip mime type. */
 private const val MIME_TYPE_ZIP = "application/zip"
+private const val MIME_TYPE_ZIP_COMPRESSED = "application/x-zip-compressed"
+private const val MIME_TYPE_OCTET_STREAM = "application/octet-stream"
+private const val MIME_TYPE_ANY = "*/*"

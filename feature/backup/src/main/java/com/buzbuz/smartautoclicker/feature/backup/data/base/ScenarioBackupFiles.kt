@@ -78,9 +78,15 @@ internal const val CONDITION_BACKUP_MATCH_REGEX =
     """[0-9]+/$CONDITION_FILE_PREFIX-?[0-9]+$CONDITION_BACKUP_EXTENSION"""
 
 /**
+ * Regex matching any png additional file in a smart scenario folder.
+ * Some valid backups contain custom image-condition names instead of the default Condition_* prefix.
+ */
+internal const val SMART_SCENARIO_PNG_BACKUP_MATCH_REGEX =
+    """[0-9]+/[^/]+$CONDITION_BACKUP_EXTENSION"""
+
+/**
  * Regex matching a legacy condition file into its folder in a backup archive.
  * Will match any file like "scenarioId/Condition_randomNumber".
  */
 internal const val LEGACY_CONDITION_BACKUP_MATCH_REGEX =
     """[0-9]+/$CONDITION_FILE_PREFIX-?[0-9]+"""
-

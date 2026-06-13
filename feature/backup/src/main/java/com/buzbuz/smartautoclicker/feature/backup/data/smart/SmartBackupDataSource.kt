@@ -26,6 +26,7 @@ import com.buzbuz.smartautoclicker.core.database.entity.EventType
 import com.buzbuz.smartautoclicker.feature.backup.data.base.CONDITION_BACKUP_MATCH_REGEX
 import com.buzbuz.smartautoclicker.feature.backup.data.base.LEGACY_CONDITION_BACKUP_MATCH_REGEX
 import com.buzbuz.smartautoclicker.feature.backup.data.base.SMART_SCENARIO_BACKUP_MATCH_REGEX
+import com.buzbuz.smartautoclicker.feature.backup.data.base.SMART_SCENARIO_PNG_BACKUP_MATCH_REGEX
 import com.buzbuz.smartautoclicker.feature.backup.data.base.ScenarioBackupDataSource
 import com.buzbuz.smartautoclicker.feature.backup.data.base.ScenarioBackupSerializer
 import com.buzbuz.smartautoclicker.feature.backup.data.base.backupFolderName
@@ -41,6 +42,8 @@ internal class SmartBackupDataSource(
     private val scenarioUnzipMatchRegex = SMART_SCENARIO_BACKUP_MATCH_REGEX.toRegex()
     /** Regex matching a condition file (png) into its folder in a backup archive. */
     private val conditionUnzipMatchRegex = CONDITION_BACKUP_MATCH_REGEX.toRegex()
+    /** Regex matching any png additional file into its folder in a backup archive. */
+    private val pngAdditionalFileUnzipMatchRegex = SMART_SCENARIO_PNG_BACKUP_MATCH_REGEX.toRegex()
     /** Regex matching a legacy condition file (raw pixels) into its folder in a backup archive. */
     private val legacyConditionUnzipMatchRegex = LEGACY_CONDITION_BACKUP_MATCH_REGEX.toRegex()
 
@@ -53,7 +56,9 @@ internal class SmartBackupDataSource(
         fileName.matches(scenarioUnzipMatchRegex)
 
     override fun isScenarioBackupAdditionalFileZipEntry(fileName: String): Boolean =
-        fileName.matches(conditionUnzipMatchRegex) || fileName.matches(legacyConditionUnzipMatchRegex)
+        fileName.matches(conditionUnzipMatchRegex) ||
+                fileName.matches(pngAdditionalFileUnzipMatchRegex) ||
+                fileName.matches(legacyConditionUnzipMatchRegex)
 
     override fun getBackupAdditionalFilesPaths(scenario: CompleteScenario): Set<String> =
         buildSet {

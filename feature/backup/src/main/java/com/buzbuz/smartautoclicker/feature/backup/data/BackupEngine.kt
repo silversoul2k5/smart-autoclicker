@@ -31,6 +31,7 @@ import kotlinx.coroutines.withContext
 
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
@@ -117,47 +118,18 @@ internal class BackupEngine(appDataDir: File, private val contentResolver: Conte
 
         withContext(Dispatchers.IO) {
             try {
-                ZipInputStream(contentResolver.openInputStream(zipFileUri)).use { zipStream ->
-                    generateSequence { zipStream.nextEntry }
-                        .forEach { zipEntry ->
-                            if (zipEntry.isDirectory) return@forEach
-
-                            Log.d(TAG, "Extracting file ${zipEntry.name}")
-                            when {
-                                dumbBackupDataSource.extractFromZip(zipStream, zipEntry.name) -> {
-                                    Log.d(TAG, "Dumb scenario file ${zipEntry.name} extracted.")
-
-                                    currentProgress++
-                                    progress.onProgressChanged(currentProgress, null)
-                                }
-
-                                smartBackupDataSource.extractFromZip(zipStream, zipEntry.name) -> {
-                                    if (smartBackupDataSource.isScenarioBackupFileZipEntry(zipEntry.name)) {
-                                        Log.d(TAG, "Smart scenario file ${zipEntry.name} extracted")
-
-                                        currentProgress++
-                                        progress.onProgressChanged(currentProgress, null)
-                                    }
-                                }
-
-                                else -> Log.w(TAG, "Nothing found to handle zip entry ${zipEntry.name}")
-                            }
-                        }
+                contentResolver.openInputStream(zipFileUri).use { inputStream ->
+                    loadBackupFromStream(
+                        inputStream = inputStream,
+                        sourceName = zipFileUri.toString(),
+                        screenSize = screenSize,
+                        progress = progress,
+                        progressCounter = {
+                            currentProgress += 1
+                            currentProgress
+                        },
+                    )
                 }
-
-                progress.onVerification?.invoke()
-                dumbBackupDataSource.verifyExtractedScenarios(screenSize)
-                smartBackupDataSource.verifyExtractedScenarios(screenSize)
-
-                Log.i(TAG, "Backup loading completed: $zipFileUri")
-                Log.i(TAG, "Inserting extracted scenarios into database")
-
-                progress.onCompleted(
-                    dumbBackupDataSource.validBackups,
-                    smartBackupDataSource.validBackups,
-                    dumbBackupDataSource.failureCount + smartBackupDataSource.failureCount,
-                    smartBackupDataSource.screenCompatWarning,
-                )
             } catch (ioEx: IOException) {
                 Log.e(TAG, "Error while loading backup archive", ioEx)
                 progress.onError()
@@ -172,6 +144,92 @@ internal class BackupEngine(appDataDir: File, private val contentResolver: Conte
                 progress.onError()
             }
         }
+    }
+
+    suspend fun loadBackup(inputStream: InputStream, screenSize: Point, progress: BackupProgress) {
+        Log.i(TAG, "Load bundled backup")
+
+        dumbBackupDataSource.reset()
+        smartBackupDataSource.reset()
+
+        var currentProgress = 0
+        progress.onProgressChanged(currentProgress, null)
+
+        withContext(Dispatchers.IO) {
+            try {
+                inputStream.use { stream ->
+                    loadBackupFromStream(
+                        inputStream = stream,
+                        sourceName = "bundled backup",
+                        screenSize = screenSize,
+                        progress = progress,
+                        progressCounter = {
+                            currentProgress += 1
+                            currentProgress
+                        },
+                    )
+                }
+            } catch (ioEx: IOException) {
+                Log.e(TAG, "Error while loading bundled backup archive", ioEx)
+                progress.onError()
+            } catch (iaEx: IllegalArgumentException) {
+                Log.e(TAG, "Error while loading bundled backup archive, file is invalid", iaEx)
+                progress.onError()
+            } catch (npEx: NullPointerException) {
+                Log.e(TAG, "Error while loading bundled backup archive, file path is null", npEx)
+                progress.onError()
+            }
+        }
+    }
+
+    private suspend fun loadBackupFromStream(
+        inputStream: InputStream?,
+        sourceName: String,
+        screenSize: Point,
+        progress: BackupProgress,
+        progressCounter: () -> Int,
+    ) {
+        if (inputStream == null) throw NullPointerException("Backup input stream is null")
+
+        ZipInputStream(inputStream).use { zipStream ->
+            generateSequence { zipStream.nextEntry }
+                .forEach { zipEntry ->
+                    if (zipEntry.isDirectory) return@forEach
+
+                    Log.d(TAG, "Extracting file ${zipEntry.name}")
+                    when {
+                        dumbBackupDataSource.extractFromZip(zipStream, zipEntry.name) -> {
+                            Log.d(TAG, "Dumb scenario file ${zipEntry.name} extracted.")
+
+                            progress.onProgressChanged(progressCounter(), null)
+                        }
+
+                        smartBackupDataSource.extractFromZip(zipStream, zipEntry.name) -> {
+                            if (smartBackupDataSource.isScenarioBackupFileZipEntry(zipEntry.name)) {
+                                Log.d(TAG, "Smart scenario file ${zipEntry.name} extracted")
+
+                                progress.onProgressChanged(progressCounter(), null)
+                            }
+                        }
+
+                        else -> Log.w(TAG, "Nothing found to handle zip entry ${zipEntry.name}")
+                    }
+                }
+        }
+
+        progress.onVerification?.invoke()
+        dumbBackupDataSource.verifyExtractedScenarios(screenSize)
+        smartBackupDataSource.verifyExtractedScenarios(screenSize)
+
+        Log.i(TAG, "Backup loading completed: $sourceName")
+        Log.i(TAG, "Inserting extracted scenarios into database")
+
+        progress.onCompleted(
+            dumbBackupDataSource.validBackups,
+            smartBackupDataSource.validBackups,
+            dumbBackupDataSource.failureCount + smartBackupDataSource.failureCount,
+            smartBackupDataSource.screenCompatWarning,
+        )
     }
 }
 
