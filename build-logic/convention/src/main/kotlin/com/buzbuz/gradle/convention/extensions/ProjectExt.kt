@@ -45,11 +45,22 @@ import org.jetbrains.kotlin.tooling.core.closure
  */
 fun Project.isBuildForVariant(variantName: String?): Boolean {
     if (variantName == null) return false
+
+    // If no tasks are requested, we are likely in a Sync or generic configuration phase.
+    // In this case, we should assume the variant is active to allow proper IDE support.
+    val taskRequests = project.gradle.startParameter.taskRequests
+    if (taskRequests.isEmpty()) return true
+
     val normalizedName = variantName.uppercaseFirstChar()
 
-    return project.gradle.startParameter.taskRequests.find { taskExecRequest ->
-        taskExecRequest.args.find { taskName -> taskName.contains(normalizedName) } != null
-    } != null
+    return taskRequests.any { taskExecRequest ->
+        taskExecRequest.args.any { taskName ->
+            taskName.contains(normalizedName) ||
+                (taskName.contains("Debug") && normalizedName.contains("Debug")) ||
+                (taskName.contains("Release") && normalizedName.contains("Release")) ||
+                taskName == "assemble" || taskName == "build"
+        }
+    }
 }
 
 fun Project.isBuildForVariant(flavour: KlickrFlavour? = null, buildType: KlickrBuildType? = null): Boolean =

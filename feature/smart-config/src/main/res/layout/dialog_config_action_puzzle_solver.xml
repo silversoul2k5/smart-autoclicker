@@ -46,6 +46,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_vertical_small"/>
 
+            <com.google.android.material.card.MaterialCardView
+                style="@style/AppTheme.Widget.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_vertical_large">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginVertical="@dimen/margin_vertical_default"
+                    android:layout_marginHorizontal="@dimen/margin_horizontal_default">
+
+                    <include layout="@layout/include_field_selector"
+                        android:id="@+id/field_puzzle_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Gemini Config -->
             <com.google.android.material.card.MaterialCardView
                 style="@style/AppTheme.Widget.Card"

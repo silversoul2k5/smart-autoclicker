@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 20,
-    "identityHash": "cfac8b7c54ea3375b11c724f3f8cc181",
+    "identityHash": "07f9efd560f9b925382374d265d5ba5d",
     "entities": [
       {
         "tableName": "action_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `eventId` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `clickPositionType` TEXT, `x` INTEGER, `y` INTEGER, `clickOnConditionId` INTEGER, `pressDuration` INTEGER, `clickOffsetX` INTEGER, `clickOffsetY` INTEGER, `fromX` INTEGER, `fromY` INTEGER, `toX` INTEGER, `toY` INTEGER, `swipeDuration` INTEGER, `pauseDuration` INTEGER, `isAdvanced` INTEGER, `isBroadcast` INTEGER, `intent_action` TEXT, `component_name` TEXT, `flags` INTEGER, `toggle_all` INTEGER, `toggle_all_type` TEXT, `counter_name` TEXT, `counter_operation` TEXT, `counter_operation_value_type` TEXT, `counter_operation_value` INTEGER, `counter_operation_counter_name` TEXT, `notification_message_type` TEXT, `notification_message_text` TEXT, `notification_message_counter_name` TEXT, `notification_importance` INTEGER, `system_action_type` TEXT, `text_value` TEXT, `text_validate_input` INTEGER, `puzzle_detection_timeout_ms` INTEGER, `puzzle_detection_threshold` REAL, `puzzle_area_bounds` TEXT, `puzzle_use_gemini_vision` INTEGER, `puzzle_gemini_api_key` TEXT, `puzzle_gemini_timeout_ms` INTEGER, `puzzle_slider_start_x` INTEGER, `puzzle_slider_start_y` INTEGER, `puzzle_slider_end_x` INTEGER, `puzzle_slider_duration` INTEGER, `puzzle_animated_swipe` INTEGER, `puzzle_swipe_steps` INTEGER, `puzzle_retry_on_failure` INTEGER, `puzzle_max_retries` INTEGER, `puzzle_retry_delay_ms` INTEGER, `puzzle_validate_after_solve` INTEGER, `puzzle_success_indicator_color` TEXT, `puzzle_success_timeout_ms` INTEGER, FOREIGN KEY(`eventId`) REFERENCES `event_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`clickOnConditionId`) REFERENCES `condition_table`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `eventId` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `clickPositionType` TEXT, `x` INTEGER, `y` INTEGER, `clickOnConditionId` INTEGER, `pressDuration` INTEGER, `clickOffsetX` INTEGER, `clickOffsetY` INTEGER, `fromX` INTEGER, `fromY` INTEGER, `toX` INTEGER, `toY` INTEGER, `swipeDuration` INTEGER, `pauseDuration` INTEGER, `isAdvanced` INTEGER, `isBroadcast` INTEGER, `intent_action` TEXT, `component_name` TEXT, `flags` INTEGER, `toggle_all` INTEGER, `toggle_all_type` TEXT, `counter_name` TEXT, `counter_operation` TEXT, `counter_operation_value_type` TEXT, `counter_operation_value` INTEGER, `counter_operation_counter_name` TEXT, `notification_message_type` TEXT, `notification_message_text` TEXT, `notification_message_counter_name` TEXT, `notification_importance` INTEGER, `system_action_type` TEXT, `text_value` TEXT, `text_validate_input` INTEGER, `puzzle_type` TEXT, `puzzle_detection_timeout_ms` INTEGER, `puzzle_detection_threshold` REAL, `puzzle_area_bounds` TEXT, `puzzle_use_gemini_vision` INTEGER, `puzzle_gemini_api_key` TEXT, `puzzle_gemini_timeout_ms` INTEGER, `puzzle_slider_start_x` INTEGER, `puzzle_slider_start_y` INTEGER, `puzzle_slider_end_x` INTEGER, `puzzle_slider_duration` INTEGER, `puzzle_animated_swipe` INTEGER, `puzzle_swipe_steps` INTEGER, `puzzle_retry_on_failure` INTEGER, `puzzle_max_retries` INTEGER, `puzzle_retry_delay_ms` INTEGER, `puzzle_validate_after_solve` INTEGER, `puzzle_success_indicator_color` TEXT, `puzzle_success_timeout_ms` INTEGER, FOREIGN KEY(`eventId`) REFERENCES `event_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`clickOnConditionId`) REFERENCES `condition_table`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -197,6 +197,11 @@
             "fieldPath": "textValidateInput",
             "columnName": "text_validate_input",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "puzzleType",
+            "columnName": "puzzle_type",
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "puzzleDetectionTimeoutMs",
@@ -879,7 +884,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cfac8b7c54ea3375b11c724f3f8cc181')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '07f9efd560f9b925382374d265d5ba5d')"
     ]
   }
 }

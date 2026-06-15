@@ -141,6 +141,7 @@ private fun CompleteActionEntity.toDomainPuzzleSolver(cleanIds: Boolean = false)
     eventId = Identifier(id = action.eventId, asTemporary = cleanIds),
     name = action.name,
     priority = action.priority,
+    puzzleType = action.puzzleType ?: "binance_security",
     detectionTimeoutMs = action.puzzleDetectionTimeoutMs ?: 5000L,
     detectionThreshold = action.puzzleDetectionThreshold ?: 0.7f,
     puzzleAreaBounds = action.puzzleAreaBounds,

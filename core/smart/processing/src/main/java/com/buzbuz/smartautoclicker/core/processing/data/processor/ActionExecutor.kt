@@ -19,6 +19,7 @@ package com.buzbuz.smartautoclicker.core.processing.data.processor
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
 import android.content.Intent as AndroidIntent
+import android.graphics.Bitmap
 import android.graphics.Path
 import android.graphics.Point
 import android.util.Log
@@ -33,6 +34,7 @@ import com.buzbuz.smartautoclicker.core.common.actions.model.ActionNotificationR
 import com.buzbuz.smartautoclicker.core.common.actions.text.findCounterReferences
 import com.buzbuz.smartautoclicker.core.common.actions.text.replaceCounterReferences
 import com.buzbuz.smartautoclicker.core.common.actions.utils.getPauseDurationMs
+import com.buzbuz.smartautoclicker.core.common.overlays.puzzle.PuzzleSolverOverlay
 import com.buzbuz.smartautoclicker.core.domain.model.CounterOperationValue
 import com.buzbuz.smartautoclicker.core.domain.model.OR
 import com.buzbuz.smartautoclicker.core.domain.model.action.Intent
@@ -49,9 +51,13 @@ import com.buzbuz.smartautoclicker.core.domain.model.action.intent.putDomainExtr
 import com.buzbuz.smartautoclicker.core.domain.model.event.Event
 import com.buzbuz.smartautoclicker.core.domain.model.event.ImageEvent
 import com.buzbuz.smartautoclicker.core.processing.data.processor.state.ProcessingState
+import com.buzbuz.smartautoclicker.core.processing.puzzle.GeminiPuzzleSolverService
+import com.buzbuz.smartautoclicker.core.processing.puzzle.GeminiPuzzleSolverService.PuzzleAction
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
@@ -90,7 +96,7 @@ internal class ActionExecutor(
         }
     }
 
-    suspend fun executeActions(event: Event, results: ConditionsResults? = null) {
+    suspend fun executeActions(event: Event, results: ConditionsResults? = null, screenFrame: Bitmap? = null) {
         event.actions.forEach { action ->
             when (action) {
                 is Click -> executeClick(event, action, results)
@@ -102,7 +108,7 @@ internal class ActionExecutor(
                 is Notification -> executeNotification(event, action)
                 is SystemAction -> executeSystemAction(action)
                 is SetText -> executeSetText(action)
-                is PuzzleSolver -> executePuzzleSolver(action)
+                is PuzzleSolver -> executePuzzleSolver(action, screenFrame)
             }
         }
     }
@@ -307,15 +313,127 @@ internal class ActionExecutor(
         }
     }
 
-    private suspend fun executePuzzleSolver(action: PuzzleSolver) {
-        // This requires the PuzzleSolverProcessor and other files from files(2)
-        // Since we are integrating it, we assume they are available in the project after sync/build
-        // For now, providing the wiring logic
+    private suspend fun executePuzzleSolver(action: PuzzleSolver, screenFrame: Bitmap?) {
         Log.i(TAG, "Executing PuzzleSolver: ${action.name}")
+
+        if (screenFrame == null) {
+            Log.e(TAG, "Puzzle solver: No screen frame provided")
+            return
+        }
+
+        if (action.geminiApiKey.isEmpty()) {
+            Log.e(TAG, "Puzzle solver: No Gemini API key configured")
+            return
+        }
+
+        val overlay = PuzzleSolverOverlay(androidExecutor.context)
         
-        // In a real implementation, we would use a factory or injection to get the processor
-        // and a way to get the latest screenshot from the engine.
-        // This is a placeholder for the integration logic.
+        try {
+            withContext(Dispatchers.Main) {
+                overlay.show()
+            }
+            
+            val puzzleImage = action.puzzleAreaBounds?.let { boundsStr ->
+                try {
+                    val parts = boundsStr.split(",").map { it.trim().toInt() }
+                    if (parts.size == 4) {
+                        Bitmap.createBitmap(screenFrame, parts[0], parts[1], parts[2], parts[3])
+                    } else screenFrame
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to crop puzzle area", e)
+                    screenFrame
+                }
+            } ?: screenFrame
+
+            val solver = GeminiPuzzleSolverService(action.geminiApiKey)
+            val puzzleActions = solver.solvePuzzle(
+                puzzleImage = puzzleImage,
+                puzzleType = action.puzzleType,
+                statusCallback = { status ->
+                    CoroutineScope(Dispatchers.Main).launch { 
+                        overlay.updateStatus(status)
+                    }
+                }
+            )
+            
+            if (puzzleActions.isEmpty()) {
+                withContext(Dispatchers.Main) {
+                    overlay.setError("Could not solve puzzle")
+                }
+                delay(2000)
+                return
+            }
+
+            puzzleActions.forEachIndexed { index, puzzleAction ->
+                withContext(Dispatchers.Main) {
+                    overlay.updateStatus("Executing action ${index + 1}/${puzzleActions.size}")
+                    overlay.addActionLog(puzzleAction.toString())
+                }
+
+                when (puzzleAction) {
+                    is PuzzleAction.Swipe -> {
+                        val path = Path()
+                        val startX = action.sliderStartX
+                        val startY = action.sliderStartY
+                        
+                        val endX = when (puzzleAction.direction) {
+                            "RIGHT" -> startX + puzzleAction.distance
+                            "LEFT" -> startX - puzzleAction.distance
+                            else -> startX
+                        }
+                        val endY = when (puzzleAction.direction) {
+                            "DOWN" -> startY + puzzleAction.distance
+                            "UP" -> startY - puzzleAction.distance
+                            else -> startY
+                        }
+
+                        path.moveTo(startX.toFloat(), startY.toFloat())
+                        path.lineTo(endX.toFloat(), endY.toFloat())
+
+                        val swipeGesture = GestureDescription.Builder().buildSingleStroke(
+                            path = path,
+                            durationMs = puzzleAction.duration.toLong(),
+                            random = random,
+                        )
+
+                        withContext(Dispatchers.Main) {
+                            androidExecutor.dispatchGesture(swipeGesture)
+                        }
+                    }
+                    is PuzzleAction.Click -> {
+                        val path = Path()
+                        path.moveTo(puzzleAction.x.toFloat(), puzzleAction.y.toFloat())
+
+                        val clickGesture = GestureDescription.Builder().buildSingleStroke(
+                            path = path,
+                            durationMs = 50L,
+                            random = random,
+                        )
+
+                        withContext(Dispatchers.Main) {
+                            androidExecutor.dispatchGesture(clickGesture)
+                        }
+                    }
+                }
+                delay(500)
+            }
+
+            withContext(Dispatchers.Main) {
+                overlay.setSuccess()
+            }
+            delay(2000)
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Puzzle solver error", e)
+            withContext(Dispatchers.Main) {
+                overlay.setError(e.message ?: "Unknown error")
+            }
+            delay(2000)
+        } finally {
+            withContext(Dispatchers.Main) { 
+                overlay.hide()
+            }
+        }
     }
 }
 

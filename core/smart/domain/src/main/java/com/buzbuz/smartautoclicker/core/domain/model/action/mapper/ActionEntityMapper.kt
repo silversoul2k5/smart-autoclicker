@@ -173,6 +173,7 @@ private fun PuzzleSolver.toPuzzleSolverEntity(): ActionEntity =
         priority = priority,
         name = name!!,
         type = ActionType.PUZZLE_SOLVER,
+        puzzleType = puzzleType,
         puzzleDetectionTimeoutMs = detectionTimeoutMs,
         puzzleDetectionThreshold = detectionThreshold,
         puzzleAreaBounds = puzzleAreaBounds,

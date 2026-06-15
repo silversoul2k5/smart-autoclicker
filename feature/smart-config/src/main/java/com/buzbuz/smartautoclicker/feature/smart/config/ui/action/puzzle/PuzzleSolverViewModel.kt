@@ -21,8 +21,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
 import com.buzbuz.smartautoclicker.core.domain.model.action.PuzzleSolver
+import com.buzbuz.smartautoclicker.core.common.settings.utils.SecureStorage
 import com.buzbuz.smartautoclicker.feature.smart.config.domain.EditionRepository
 
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -36,8 +38,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PuzzleSolverViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val editionRepository: EditionRepository,
 ) : ViewModel() {
+
+    init {
+        // Initialize API key from secure storage if the action's key is empty
+        viewModelScope.launch {
+            val savedKey = SecureStorage.getGeminiApiKey(context)
+            if (savedKey != null) {
+                val currentAction = editionRepository.editionState.getEditedAction<PuzzleSolver>()
+                if (currentAction != null && currentAction.geminiApiKey.isEmpty()) {
+                    setApiKey(savedKey)
+                }
+            }
+        }
+    }
 
     /** The action being configured by the user. */
     private val configuredPuzzle = editionRepository.editionState.editedActionState
@@ -57,6 +73,7 @@ class PuzzleSolverViewModel @Inject constructor(
     /** Tells if the name is valid or not. */
     val nameError: Flow<Boolean> = configuredPuzzle.map { it.name.isNullOrEmpty() }
 
+    val puzzleType: Flow<String> = configuredPuzzle.map { it.puzzleType }
     val useGemini: Flow<Boolean> = configuredPuzzle.map { it.useGeminiVision }
     val apiKey: Flow<String> = configuredPuzzle.map { it.geminiApiKey }
     val sliderDuration: Flow<String> = configuredPuzzle.map { it.sliderDuration.toString() }
@@ -75,12 +92,17 @@ class PuzzleSolverViewModel @Inject constructor(
         updateEditedAction { it.copy(name = name) }
     }
 
+    fun setPuzzleType(type: String) {
+        updateEditedAction { it.copy(puzzleType = type) }
+    }
+
     fun toggleUseGemini() {
         updateEditedAction { it.copy(useGeminiVision = !it.useGeminiVision) }
     }
 
     fun setApiKey(key: String) {
         updateEditedAction { it.copy(geminiApiKey = key) }
+        SecureStorage.saveGeminiApiKey(context, key)
     }
 
     fun setSliderDuration(duration: Long?) {

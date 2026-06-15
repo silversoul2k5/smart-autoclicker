@@ -27,6 +27,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 
+import com.buzbuz.smartautoclicker.core.common.overlays.dialog.implementation.DialogChoice
+import com.buzbuz.smartautoclicker.core.common.overlays.dialog.implementation.MultiChoiceDialog
 import com.buzbuz.smartautoclicker.core.common.overlays.base.viewModels
 import com.buzbuz.smartautoclicker.core.common.overlays.dialog.OverlayDialog
 import com.buzbuz.smartautoclicker.core.ui.bindings.dialogs.DialogNavigationButton
@@ -38,6 +40,7 @@ import com.buzbuz.smartautoclicker.core.ui.bindings.fields.setOnTextChangedListe
 import com.buzbuz.smartautoclicker.core.ui.bindings.fields.setText
 import com.buzbuz.smartautoclicker.core.ui.bindings.fields.setError
 import com.buzbuz.smartautoclicker.core.ui.bindings.fields.setTitle
+import com.buzbuz.smartautoclicker.core.ui.bindings.fields.setDescription
 import com.buzbuz.smartautoclicker.feature.smart.config.R
 import com.buzbuz.smartautoclicker.feature.smart.config.databinding.DialogConfigActionPuzzleSolverBinding
 import com.buzbuz.smartautoclicker.feature.smart.config.di.ScenarioConfigViewModelsEntryPoint
@@ -85,6 +88,10 @@ class PuzzleSolverDialog(
                 )
             }
             hideSoftInputOnFocusLoss(fieldName.textField)
+
+            fieldPuzzleType.apply {
+                setOnClickListener { showPuzzleTypeSelectionDialog() }
+            }
 
             fieldUseGemini.apply {
                 setTitle("Use Gemini Vision API")
@@ -134,6 +141,7 @@ class PuzzleSolverDialog(
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { viewModel.name.collect(viewBinding.fieldName::setText) }
                 launch { viewModel.nameError.collect(viewBinding.fieldName::setError) }
+                launch { viewModel.puzzleType.collect(::updatePuzzleType) }
                 launch { viewModel.useGemini.collect(::updateUseGemini) }
                 launch { viewModel.apiKey.collect(viewBinding.fieldApiKey::setText) }
                 launch { viewModel.sliderDuration.collect(::updateSliderDuration) }
@@ -149,6 +157,26 @@ class PuzzleSolverDialog(
         viewBinding.fieldUseGemini.setChecked(useGemini)
         viewBinding.fieldApiKey.root.visibility = if (useGemini) View.VISIBLE else View.GONE
         viewBinding.dividerGemini.visibility = if (useGemini) View.VISIBLE else View.GONE
+    }
+
+    private fun updatePuzzleType(type: String) {
+        val choice = PuzzleTypeChoice.fromType(type)
+        viewBinding.fieldPuzzleType.apply {
+            setTitle(context.getString(choice.title))
+            setDescription(choice.description?.let { context.getString(it) })
+        }
+    }
+
+    private fun showPuzzleTypeSelectionDialog() {
+        overlayManager.navigateTo(
+            context = context,
+            newOverlay = MultiChoiceDialog(
+                theme = R.style.ScenarioConfigTheme,
+                dialogTitleText = R.string.dialog_title_action_type,
+                choices = PuzzleTypeChoice.allChoices,
+                onChoiceSelected = { choice -> viewModel.setPuzzleType(choice.type) }
+            )
+        )
     }
 
     private fun updateSliderDuration(duration: String) {

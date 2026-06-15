@@ -64,6 +64,7 @@ data class PuzzleSolver(
     override val name: String?,
     override var priority: Int,
 
+    val puzzleType: String = "binance_security",
     val detectionTimeoutMs: Long = 5000L,
     val detectionThreshold: Float = 0.7f,
     val puzzleAreaBounds: String? = null,

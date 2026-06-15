@@ -170,6 +170,7 @@ data class ActionEntity(
     @ColumnInfo(name = "text_validate_input") val textValidateInput: Boolean? = null,
 
     // ActionType.PUZZLE_SOLVER
+    @ColumnInfo(name = "puzzle_type") val puzzleType: String? = null,
     @ColumnInfo(name = "puzzle_detection_timeout_ms") val puzzleDetectionTimeoutMs: Long? = null,
     @ColumnInfo(name = "puzzle_detection_threshold") val puzzleDetectionThreshold: Float? = null,
     @ColumnInfo(name = "puzzle_area_bounds") val puzzleAreaBounds: String? = null,

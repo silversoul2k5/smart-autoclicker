@@ -29,6 +29,7 @@ android {
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.security.crypto)
 
     implementation(project(":core:common:base"))
 }

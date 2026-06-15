@@ -14,6 +14,7 @@ java = "21"
 kotlin = "2.3.21"
 kotlinxCoroutines = "1.10.2"
 ksp = "2.3.7"
+googleGenerativeAi = "0.9.0"
 
 # Androidx
 androidxAnnotation = "1.10.0"
@@ -30,6 +31,7 @@ androidxRecyclerView = "1.4.0"
 androidxRoom = "2.8.4"
 androidxSplashScreen = "1.2.0"
 androidxVectorDrawable = "1.2.0"
+androidxSecurity = "1.1.0"
 
 # Other
 airbnbLottie = "6.7.1"
@@ -104,6 +106,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
 androidx-vectorDrawable = { group = "androidx.vectordrawable", name = "vectordrawable-animated", version.ref = "androidxVectorDrawable" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidxSecurity" }
 
 # Other
 airbnb-lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "airbnbLottie" }
@@ -114,6 +117,7 @@ google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-androi
 google-dagger-hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "googleDaggerHilt" }
 google-protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "googleProtobufRuntime" }
 google-protobuf-kotlin = { group = "com.google.protobuf", name = "protobuf-kotlin", version.ref = "googleProtobufRuntime" }
+generativeai-google = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "googleGenerativeAi" }
 
 
 # PlayStore only. Might seem unused but check in files if that is the case

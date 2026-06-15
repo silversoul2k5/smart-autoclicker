@@ -140,7 +140,7 @@ internal class ScenarioProcessor(
 
             progressListener?.onEventProcessingCompleted(triggerEvent, results.fulfilled == true, results.getAllTriggerConditionsResults())
             if (results.fulfilled  == true) {
-                actionExecutor.executeActions(triggerEvent, results)
+                actionExecutor.executeActions(triggerEvent, results, null)
                 progressListener?.onEventActionsExecuted(triggerEvent, results.getAllTriggerConditionsResults())
             }
         }
@@ -164,7 +164,7 @@ internal class ScenarioProcessor(
 
                 progressListener?.onEventProcessingCompleted(imageEvent, results.fulfilled == true, results.getAllImageConditionsResults())
                 if (results.fulfilled == true) {
-                    actionExecutor.executeActions(imageEvent, results)
+                    actionExecutor.executeActions(imageEvent, results, screenFrame)
                     progressListener?.onEventActionsExecuted(imageEvent, results.getAllImageConditionsResults())
 
                     if (!imageEvent.keepDetecting) break

@@ -18,11 +18,15 @@ package com.buzbuz.smartautoclicker.core.common.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
+import android.content.Context
 import android.content.Intent
 import com.buzbuz.smartautoclicker.core.base.Dumpable
 import com.buzbuz.smartautoclicker.core.common.actions.model.ActionNotificationRequest
 
 interface AndroidActionExecutor: Dumpable {
+
+    /** The context for the executor. */
+    val context: Context
 
     /**
      * Initialize the executor.

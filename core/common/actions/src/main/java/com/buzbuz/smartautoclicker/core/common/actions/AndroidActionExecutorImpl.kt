@@ -19,6 +19,7 @@ package com.buzbuz.smartautoclicker.core.common.actions
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.util.AndroidRuntimeException
 import android.util.Log
@@ -41,6 +42,9 @@ internal class AndroidActionExecutorImpl @Inject constructor(
     private val notificationRequestExecutor: NotificationRequestExecutor,
     private val textExecutor: TextExecutor,
 ) : AndroidActionExecutor {
+
+    override val context: Context
+        get() = accessibilityService ?: throw IllegalStateException("Accessibility service not connected")
 
     /** Keep the service in a week reference to avoid potential leak. */
     private var accessibilityServiceRef: WeakReference<AccessibilityService>? = null

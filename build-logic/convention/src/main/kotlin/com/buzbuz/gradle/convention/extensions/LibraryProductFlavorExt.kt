@@ -22,13 +22,10 @@ import org.gradle.api.GradleException
 
 
 fun LibraryProductFlavor.manifestPlaceholders(parameter: BuildParameter<*>) {
-    if (!parameter.rootProject.isBuildForVariant(name)) return
     manifestPlaceholders[parameter.name] = parameter.stringValue
 }
 
 fun LibraryProductFlavor.buildConfigField(parameter: BuildParameter<*>) {
-    if (!parameter.rootProject.isBuildForVariant(name)) return
-
     when (parameter.typedValue) {
         is Int -> intBuildConfigField(parameter)
         is String -> stringBuildConfigField(parameter)
