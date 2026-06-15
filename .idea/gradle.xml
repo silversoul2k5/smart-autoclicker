@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic" name="build-logic">
+                <projects>
+                  <project path="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic" />
+                  <project path="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic/convention" />
+                  <project path="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic/obfuscation" />
+                  <project path="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic/source-download" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic/convention" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic/obfuscation" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/build-logic/source-download" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/actions" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/android" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/base" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/bitmaps" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/display" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/overlays" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/permissions" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/quality" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/settings" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/common/ui" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/dumb" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/smart" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/smart/database" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/smart/debugging" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/smart/detection" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/smart/domain" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/core/smart/processing" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/backup" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/dumb-config" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/notifications" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/quick-settings-tile" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/revenue" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/review" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/smart-config" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/smart-debugging" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/feature/tutorial" />
+            <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker/smartautoclicker" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

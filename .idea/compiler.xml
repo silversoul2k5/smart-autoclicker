@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="21">
+      <module name="build-logic.convention" target="21" />
+      <module name="build-logic.convention.main" target="21" />
+      <module name="build-logic.convention.test" target="21" />
+      <module name="build-logic.obfuscation" target="21" />
+      <module name="build-logic.obfuscation.main" target="21" />
+      <module name="build-logic.obfuscation.test" target="21" />
+      <module name="build-logic.source-download" target="21" />
+      <module name="build-logic.source-download.main" target="21" />
+      <module name="build-logic.source-download.test" target="21" />
+      <module name="Klick'r.core.common.actions" target="21" />
+      <module name="Klick'r.core.common.android" target="21" />
+      <module name="Klick'r.core.common.base" target="21" />
+      <module name="Klick'r.core.common.bitmaps" target="21" />
+      <module name="Klick'r.core.common.display" target="21" />
+      <module name="Klick'r.core.common.overlays" target="21" />
+      <module name="Klick'r.core.common.permissions" target="21" />
+      <module name="Klick'r.core.common.quality" target="21" />
+      <module name="Klick'r.core.common.settings" target="21" />
+      <module name="Klick'r.core.common.ui" target="21" />
+      <module name="Klick'r.core.dumb" target="21" />
+      <module name="Klick'r.core.smart.database" target="21" />
+      <module name="Klick'r.core.smart.debugging" target="21" />
+      <module name="Klick'r.core.smart.detection" target="21" />
+      <module name="Klick'r.core.smart.domain" target="21" />
+      <module name="Klick'r.core.smart.processing" target="21" />
+      <module name="Klick'r.feature.backup" target="21" />
+      <module name="Klick'r.feature.dumb-config" target="21" />
+      <module name="Klick'r.feature.notifications" target="21" />
+      <module name="Klick'r.feature.quick-settings-tile" target="21" />
+      <module name="Klick'r.feature.revenue" target="21" />
+      <module name="Klick'r.feature.review" target="21" />
+      <module name="Klick'r.feature.smart-config" target="21" />
+      <module name="Klick'r.feature.smart-debugging" target="21" />
+      <module name="Klick'r.feature.tutorial" target="21" />
+      <module name="Klick'r.smartautoclicker" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
