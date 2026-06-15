@@ -22,6 +22,7 @@ import android.util.Log
 import android.util.Base64
 
 import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.GenerationConfig
 import com.google.ai.client.generativeai.type.content
 
 import kotlinx.coroutines.*
@@ -39,11 +40,17 @@ class GeminiPuzzleSolverService(
     
     init {
         try {
+            val generationConfig = GenerationConfig.Builder().apply {
+                temperature = 0.1f
+                maxOutputTokens = 300
+            }.build()
+
             generativeModel = GenerativeModel(
                 modelName = MODEL_NAME,
-                apiKey = apiKey
+                apiKey = apiKey,
+                generationConfig = generationConfig
             )
-            Log.d(TAG, "Gemini model initialized successfully")
+            Log.d(TAG, "Gemini model initialized successfully with tuned config")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize Gemini model", e)
             throw e
@@ -118,27 +125,23 @@ class GeminiPuzzleSolverService(
         return when (puzzleType.lowercase()) {
             "binance_security", "security_verification" -> {
                 """
-Analyze this Binance Security Verification puzzle image.
-
-CRITICAL ANALYSIS POINTS:
-1. Identify the yellow puzzle piece position
-2. Identify the gray slot where it should fit
-3. Calculate the EXACT displacement needed
-4. Determine primary direction: RIGHT, LEFT, UP, or DOWN
-
-PROVIDE RESPONSE IN THIS EXACT FORMAT:
-```
-DIRECTION: RIGHT
-DISTANCE: 250
-DURATION: 400
-CONFIDENCE: 95
-```
-
-GUIDELINES:
-- Distance in pixels (typical: 150-300px)
-- Duration in milliseconds (typical: 300-500ms)
-- For ambiguous puzzles, provide your best estimate
-- Include confidence percentage (0-100)
+                TASK: Calculate exact pixel movement for Binance puzzle slider.
+                
+                YOU MUST:
+                1. Find yellow puzzle piece current position
+                2. Find target slot position
+                3. Calculate exact pixel distance
+                4. Provide confidence score
+                5. Show your math
+                
+                RESPONSE FORMAT (EXACT):
+                CURRENT_POS: [X] pixels
+                TARGET_POS: [X] pixels
+                MOVE_PIXELS: [number]
+                CONFIDENCE: [0.0-1.0]
+                MATH: [show calculation]
+                
+                Important: Be precise. No approximations.
                 """.trimIndent()
             }
             "hcaptcha", "hcaptcha_tile" -> {
@@ -200,24 +203,22 @@ Be precise and technical. Format your response clearly.
 
         return when (puzzleType.lowercase()) {
             "binance_security", "security_verification" -> {
-                val directionMatch = Regex("DIRECTION:\\s*([A-Z_]+)", RegexOption.IGNORE_CASE)
-                    .find(response)?.groupValues?.getOrNull(1)?.trim() ?: return emptyList()
+                // New parsing logic for improved prompt
+                val distanceMatch = Regex("MOVE_PIXELS:\\s*(\\d+)").find(response)
+                    ?.groupValues?.getOrNull(1)?.toIntOrNull()
                 
-                val distanceMatch = Regex("DISTANCE:\\s*(\\d+)").find(response)
+                // Fallback to old format if new one fails
+                val finalDistance = distanceMatch ?: Regex("DISTANCE:\\s*(\\d+)").find(response)
                     ?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 200
-                
-                val durationMatch = Regex("DURATION:\\s*(\\d+)").find(response)
-                    ?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 400
 
-                if (directionMatch.isNotEmpty()) {
-                    actions.add(
-                        PuzzleAction.Swipe(
-                            direction = directionMatch.uppercase(),
-                            distance = distanceMatch,
-                            duration = durationMatch
-                        )
+                // Assuming horizontal swipe for Binance
+                actions.add(
+                    PuzzleAction.Swipe(
+                        direction = "RIGHT",
+                        distance = finalDistance,
+                        duration = 400
                     )
-                }
+                )
                 actions
             }
             "hcaptcha", "hcaptcha_tile" -> {
