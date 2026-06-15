@@ -53,5 +53,45 @@ sealed class Action : Identifiable, Completable, Prioritizable {
             is Notification -> copy(id = id, eventId = eventId, name = name, priority = priority)
             is SystemAction -> copy(id = id, eventId = eventId, name = name, priority = priority)
             is SetText -> copy(id = id, eventId = eventId, name = name, priority = priority)
+            is PuzzleSolver -> copy(id = id, eventId = eventId, name = name, priority = priority)
         }
+}
+
+/** Action that automatically solves puzzles. */
+data class PuzzleSolver(
+    override val id: Identifier,
+    override val eventId: Identifier,
+    override val name: String?,
+    override var priority: Int,
+
+    val detectionTimeoutMs: Long = 5000L,
+    val detectionThreshold: Float = 0.7f,
+    val puzzleAreaBounds: String? = null,
+    val useGeminiVision: Boolean = true,
+    val geminiApiKey: String = "",
+    val geminiTimeoutMs: Long = 3000L,
+    val sliderStartX: Int = 100,
+    val sliderStartY: Int = 0,
+    val sliderEndX: Int = 500,
+    val sliderDuration: Long = 500L,
+    val animatedSwipe: Boolean = true,
+    val swipeSteps: Int = 20,
+    val retryOnFailure: Boolean = true,
+    val maxRetries: Int = 3,
+    val retryDelayMs: Long = 1000L,
+    val validateAfterSolve: Boolean = true,
+    val successIndicatorColor: String = "#00FF00",
+    val successTimeoutMs: Long = 2000L,
+) : Action() {
+
+    override fun hashCodeNoIds(): Int =
+        (name?.hashCode() ?: 0) + detectionTimeoutMs.hashCode() + detectionThreshold.hashCode() +
+                (puzzleAreaBounds?.hashCode() ?: 0) + useGeminiVision.hashCode() + geminiApiKey.hashCode() +
+                geminiTimeoutMs.hashCode() + sliderStartX.hashCode() + sliderStartY.hashCode() +
+                sliderEndX.hashCode() + sliderDuration.hashCode() + animatedSwipe.hashCode() +
+                swipeSteps.hashCode() + retryOnFailure.hashCode() + maxRetries.hashCode() +
+                retryDelayMs.hashCode() + validateAfterSolve.hashCode() +
+                successIndicatorColor.hashCode() + successTimeoutMs.hashCode()
+
+    override fun deepCopy(): Action = copy()
 }

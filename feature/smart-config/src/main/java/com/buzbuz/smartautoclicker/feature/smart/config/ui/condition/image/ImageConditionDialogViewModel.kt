@@ -83,6 +83,14 @@ class ImageConditionViewModel @Inject constructor(
     val shouldBeDetected: Flow<Boolean> = configuredCondition
         .map { condition -> condition.shouldBeDetected }
 
+    /** Tells if we should use a custom detection interval. */
+    val useCustomDetectionInterval: Flow<Boolean> = configuredCondition
+        .map { condition -> condition.useCustomDetectionInterval }
+
+    /** Tells if we should require a specific detection count. */
+    val requireSpecificDetectionCount: Flow<Boolean> = configuredCondition
+        .map { condition -> condition.requireSpecificDetectionCount }
+
     /** The type of detection currently selected by the user. */
     val detectionType: Flow<DetectionTypeState> = configuredCondition
         .map { condition ->
@@ -205,6 +213,20 @@ class ImageConditionViewModel @Inject constructor(
     fun toggleResetAfterTrigger() {
         updateEditedCondition { oldCondition ->
             oldCondition.copy(resetAfterTrigger = !oldCondition.resetAfterTrigger)
+        }
+    }
+
+    /** Toggle if we should use a custom detection interval. */
+    fun toggleUseCustomDetectionInterval() {
+        updateEditedCondition { oldCondition ->
+            oldCondition.copy(useCustomDetectionInterval = !oldCondition.useCustomDetectionInterval)
+        }
+    }
+
+    /** Toggle if we should require a specific detection count. */
+    fun toggleRequireSpecificDetectionCount() {
+        updateEditedCondition { oldCondition ->
+            oldCondition.copy(requireSpecificDetectionCount = !oldCondition.requireSpecificDetectionCount)
         }
     }
 

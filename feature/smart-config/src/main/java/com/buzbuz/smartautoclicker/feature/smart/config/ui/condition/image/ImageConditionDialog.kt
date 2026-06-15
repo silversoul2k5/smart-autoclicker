@@ -151,11 +151,21 @@ class ImageConditionDialog(
                 setOnValueChangedFromUserListener { value -> viewModel.setThreshold(value.roundToInt()) }
             }
 
+            fieldUseCustomInterval.apply {
+                setTitle(context.getString(R.string.field_title_condition_use_custom_interval))
+                setOnClickListener { viewModel.toggleUseCustomDetectionInterval() }
+            }
+
             fieldSliderDetectionInterval.apply {
                 setTitle(context.getString(R.string.field_title_condition_detection_interval))
                 setValueLabelState(isEnabled = true, prefix = "ms")
                 setSliderRange(MIN_DETECTION_INTERVAL_MS, MAX_DETECTION_INTERVAL_MS)
                 setOnValueChangedFromUserListener { value -> viewModel.setDetectionInterval(value.roundToInt().toLong()) }
+            }
+
+            fieldRequireSpecificCount.apply {
+                setTitle(context.getString(R.string.field_title_condition_require_specific_count))
+                setOnClickListener { viewModel.toggleRequireSpecificDetectionCount() }
             }
 
             fieldSliderRequiredDetectionCount.apply {
@@ -192,6 +202,8 @@ class ImageConditionDialog(
                 launch { viewModel.nameError.collect(viewBinding.fieldEditName::setError) }
                 launch { viewModel.conditionBitmap.collect(::updateConditionBitmap) }
                 launch { viewModel.shouldBeDetected.collect(::updateShouldBeDetected) }
+                launch { viewModel.useCustomDetectionInterval.collect(::updateUseCustomDetectionInterval) }
+                launch { viewModel.requireSpecificDetectionCount.collect(::updateRequireSpecificDetectionCount) }
                 launch { viewModel.detectionType.collect(::updateDetectionType) }
                 launch { viewModel.threshold.collect(::updateThreshold) }
                 launch { viewModel.detectionIntervalMs.collect(::updateDetectionIntervalMs) }
@@ -255,6 +267,24 @@ class ImageConditionDialog(
         viewBinding.fieldShouldAppear.apply {
             setChecked(newValue)
             setDescription(if (newValue) 1 else 0)
+        }
+    }
+
+    private fun updateUseCustomDetectionInterval(newValue: Boolean) {
+        viewBinding.apply {
+            fieldUseCustomInterval.setChecked(newValue)
+            fieldSliderDetectionInterval.root.visibility = if (newValue) View.VISIBLE else View.GONE
+            dividerCustomInterval.visibility = if (newValue) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun updateRequireSpecificDetectionCount(newValue: Boolean) {
+        viewBinding.apply {
+            fieldRequireSpecificCount.setChecked(newValue)
+            fieldSliderRequiredDetectionCount.root.visibility = if (newValue) View.VISIBLE else View.GONE
+            dividerSpecificCount.visibility = if (newValue) View.VISIBLE else View.GONE
+            fieldResetAfterTrigger.root.visibility = if (newValue) View.VISIBLE else View.GONE
+            dividerResetAfterTrigger.visibility = if (newValue) View.VISIBLE else View.GONE
         }
     }
 

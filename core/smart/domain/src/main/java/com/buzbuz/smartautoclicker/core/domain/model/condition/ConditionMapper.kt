@@ -47,6 +47,8 @@ internal fun ImageCondition.toEntity() = ConditionEntity(
     detectionIntervalMs = detectionIntervalMs,
     requiredDetectionCount = requiredDetectionCount,
     resetAfterTrigger = resetAfterTrigger,
+    useCustomDetectionInterval = useCustomDetectionInterval,
+    requireSpecificDetectionCount = requireSpecificDetectionCount,
 )
 
 internal fun TriggerCondition.toEntity(): ConditionEntity = when (this) {
@@ -118,6 +120,8 @@ private fun ConditionEntity.toDomainImageCondition(cleanIds: Boolean = false): I
         detectionIntervalMs = detectionIntervalMs,
         requiredDetectionCount = requiredDetectionCount,
         resetAfterTrigger = resetAfterTrigger,
+        useCustomDetectionInterval = useCustomDetectionInterval,
+        requireSpecificDetectionCount = requireSpecificDetectionCount,
     )
 
 private fun ConditionEntity.toDomainBroadcastReceived(cleanIds: Boolean = false): TriggerCondition =

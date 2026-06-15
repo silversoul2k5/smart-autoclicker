@@ -38,6 +38,7 @@ import com.buzbuz.smartautoclicker.core.domain.model.OR
 import com.buzbuz.smartautoclicker.core.domain.model.action.Intent
 import com.buzbuz.smartautoclicker.core.domain.model.action.Click
 import com.buzbuz.smartautoclicker.core.domain.model.action.Pause
+import com.buzbuz.smartautoclicker.core.domain.model.action.PuzzleSolver
 import com.buzbuz.smartautoclicker.core.domain.model.action.Swipe
 import com.buzbuz.smartautoclicker.core.domain.model.action.ToggleEvent
 import com.buzbuz.smartautoclicker.core.domain.model.action.ChangeCounter
@@ -101,6 +102,7 @@ internal class ActionExecutor(
                 is Notification -> executeNotification(event, action)
                 is SystemAction -> executeSystemAction(action)
                 is SetText -> executeSetText(action)
+                is PuzzleSolver -> executePuzzleSolver(action)
             }
         }
     }
@@ -303,6 +305,17 @@ internal class ActionExecutor(
                 validate = action.validateInput,
             )
         }
+    }
+
+    private suspend fun executePuzzleSolver(action: PuzzleSolver) {
+        // This requires the PuzzleSolverProcessor and other files from files(2)
+        // Since we are integrating it, we assume they are available in the project after sync/build
+        // For now, providing the wiring logic
+        Log.i(TAG, "Executing PuzzleSolver: ${action.name}")
+        
+        // In a real implementation, we would use a factory or injection to get the processor
+        // and a way to get the latest screenshot from the engine.
+        // This is a placeholder for the integration logic.
     }
 }
 

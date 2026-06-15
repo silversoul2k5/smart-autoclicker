@@ -52,6 +52,8 @@ data class ImageCondition(
     val detectionIntervalMs: Long = DEFAULT_DETECTION_INTERVAL_MS,
     val requiredDetectionCount: Int = DEFAULT_REQUIRED_DETECTION_COUNT,
     val resetAfterTrigger: Boolean = DEFAULT_RESET_AFTER_TRIGGER,
+    val useCustomDetectionInterval: Boolean = false,
+    val requireSpecificDetectionCount: Boolean = false,
 ): Condition(), Prioritizable {
 
     /** @return creates a deep copy of this condition. */
@@ -67,7 +69,8 @@ data class ImageCondition(
     override fun hashCodeNoIds(): Int =
         name.hashCode() + path.hashCode() + area.hashCode() + threshold.hashCode() + detectionType.hashCode() +
                 shouldBeDetected.hashCode() + detectionArea.hashCode() + priority.hashCode() +
-                detectionIntervalMs.hashCode() + requiredDetectionCount.hashCode() + resetAfterTrigger.hashCode()
+                detectionIntervalMs.hashCode() + requiredDetectionCount.hashCode() + resetAfterTrigger.hashCode() +
+                useCustomDetectionInterval.hashCode() + requireSpecificDetectionCount.hashCode()
 }
 
 const val DEFAULT_DETECTION_INTERVAL_MS = 500L

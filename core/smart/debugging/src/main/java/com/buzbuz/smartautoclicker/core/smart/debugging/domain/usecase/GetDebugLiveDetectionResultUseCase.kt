@@ -22,6 +22,7 @@ import com.buzbuz.smartautoclicker.core.domain.model.action.Click
 import com.buzbuz.smartautoclicker.core.domain.model.action.Intent
 import com.buzbuz.smartautoclicker.core.domain.model.action.Notification
 import com.buzbuz.smartautoclicker.core.domain.model.action.Pause
+import com.buzbuz.smartautoclicker.core.domain.model.action.PuzzleSolver
 import com.buzbuz.smartautoclicker.core.domain.model.action.SetText
 import com.buzbuz.smartautoclicker.core.domain.model.action.Swipe
 import com.buzbuz.smartautoclicker.core.domain.model.action.SystemAction
@@ -85,7 +86,8 @@ class GetDebugLiveDetectionResultUseCase @Inject constructor(
                 is Notification,
                 is SetText,
                 is SystemAction,
-                is ToggleEvent -> 0
+                is ToggleEvent,
+                is PuzzleSolver -> 0
             }
         }
 }

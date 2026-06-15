@@ -132,6 +132,7 @@ class SmartActionsBriefViewModel @Inject constructor(
                 add(ActionTypeChoice.ToggleEvent)
                 add(ActionTypeChoice.Notification)
                 add(ActionTypeChoice.Intent)
+                add(ActionTypeChoice.PuzzleSolver)
             }
         }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
@@ -176,6 +177,7 @@ class SmartActionsBriefViewModel @Inject constructor(
         ActionTypeChoice.Notification -> editionRepository.editedItemsBuilder.createNewNotification(context)
         ActionTypeChoice.System -> editionRepository.editedItemsBuilder.createNewSystemAction(context)
         ActionTypeChoice.SetText -> editionRepository.editedItemsBuilder.createNewSetText(context)
+        ActionTypeChoice.PuzzleSolver -> editionRepository.editedItemsBuilder.createNewPuzzleSolver(context)
         ActionTypeChoice.Copy -> throw IllegalArgumentException("Unsupported action type for creation $choice")
     }
 

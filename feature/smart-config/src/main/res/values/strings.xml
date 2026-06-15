@@ -98,6 +98,10 @@
     <string name="item_set_text_details_text">%1$s</string>
     <string name="item_set_text_details_text_empty">Clear text</string>
 
+    <string name="item_puzzle_solver_title">Puzzle Solver</string>
+    <string name="item_puzzle_solver_desc">Automatically solve puzzles on the screen</string>
+    <string name="item_puzzle_solver_details">Solve puzzles with detection</string>
+
     <!-- Dialog Copy =============================================================================================== -->
 
     <string name="search_view_hint_event_copy">Search by event name</string>
@@ -203,6 +207,8 @@
     <string name="field_select_detection_area_desc">In [%1$d, %2$d, %3$d, %4$d]</string>
 
     <string name="field_title_condition_threshold">Tolerated difference</string>
+    <string name="field_title_condition_use_custom_interval">Use custom detection interval</string>
+    <string name="field_title_condition_require_specific_count">Require specific number of detections</string>
     <string name="field_title_condition_detection_interval">Detection Interval (ms)</string>
     <string name="field_title_condition_required_detection_count">Required Detections</string>
     <string name="field_title_condition_reset_after_trigger">Reset after trigger</string>

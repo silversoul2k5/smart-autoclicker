@@ -17,6 +17,7 @@ import com.buzbuz.smartautoclicker.core.domain.model.action.Click
 import com.buzbuz.smartautoclicker.core.domain.model.action.Intent
 import com.buzbuz.smartautoclicker.core.domain.model.action.Notification
 import com.buzbuz.smartautoclicker.core.domain.model.action.Pause
+import com.buzbuz.smartautoclicker.core.domain.model.action.PuzzleSolver
 import com.buzbuz.smartautoclicker.core.domain.model.action.SetText
 import com.buzbuz.smartautoclicker.core.domain.model.action.Swipe
 import com.buzbuz.smartautoclicker.core.domain.model.action.SystemAction
@@ -35,6 +36,7 @@ internal fun CompleteActionEntity.toDomain(cleanIds: Boolean = false): Action = 
     ActionType.NOTIFICATION -> toDomainNotification(cleanIds)
     ActionType.SYSTEM -> toDomainSystem(cleanIds)
     ActionType.TEXT -> toDomainSetText(cleanIds)
+    ActionType.PUZZLE_SOLVER -> toDomainPuzzleSolver(cleanIds)
 }
 
 private fun CompleteActionEntity.toDomainClick(cleanIds: Boolean = false) = Click(
@@ -132,6 +134,31 @@ private fun CompleteActionEntity.toDomainSetText(cleanIds: Boolean = false) = Se
     priority = action.priority,
     text = action.textValue ?: "",
     validateInput = action.textValidateInput ?: false,
+)
+
+private fun CompleteActionEntity.toDomainPuzzleSolver(cleanIds: Boolean = false) = PuzzleSolver(
+    id = Identifier(id = action.id, asTemporary = cleanIds),
+    eventId = Identifier(id = action.eventId, asTemporary = cleanIds),
+    name = action.name,
+    priority = action.priority,
+    detectionTimeoutMs = action.puzzleDetectionTimeoutMs ?: 5000L,
+    detectionThreshold = action.puzzleDetectionThreshold ?: 0.7f,
+    puzzleAreaBounds = action.puzzleAreaBounds,
+    useGeminiVision = action.puzzleUseGeminiVision ?: true,
+    geminiApiKey = action.puzzleGeminiApiKey ?: "",
+    geminiTimeoutMs = action.puzzleGeminiTimeoutMs ?: 3000L,
+    sliderStartX = action.puzzleSliderStartX ?: 100,
+    sliderStartY = action.puzzleSliderStartY ?: 0,
+    sliderEndX = action.puzzleSliderEndX ?: 500,
+    sliderDuration = action.puzzleSliderDuration ?: 500L,
+    animatedSwipe = action.puzzleAnimatedSwipe ?: true,
+    swipeSteps = action.puzzleSwipeSteps ?: 20,
+    retryOnFailure = action.puzzleRetryOnFailure ?: true,
+    maxRetries = action.puzzleMaxRetries ?: 3,
+    retryDelayMs = action.puzzleRetryDelayMs ?: 1000L,
+    validateAfterSolve = action.puzzleValidateAfterSolve ?: true,
+    successIndicatorColor = action.puzzleSuccessIndicatorColor ?: "#00FF00",
+    successTimeoutMs = action.puzzleSuccessTimeoutMs ?: 2000L,
 )
 
 private fun ClickPositionType.toDomain(): Click.PositionType =

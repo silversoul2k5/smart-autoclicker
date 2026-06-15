@@ -104,4 +104,11 @@ sealed class ActionTypeChoice(
         R.string.item_set_text_desc,
         getSetTextIconRes(),
     )
+
+    /** Puzzle Solver Action choice. */
+    data object PuzzleSolver : ActionTypeChoice(
+        R.string.item_puzzle_solver_title,
+        R.string.item_puzzle_solver_desc,
+        R.drawable.ic_confirm,
+    )
 }

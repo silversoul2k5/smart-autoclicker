@@ -168,6 +168,26 @@ data class ActionEntity(
     // ActionType.TEXT
     @ColumnInfo(name = "text_value") val textValue: String? = null,
     @ColumnInfo(name = "text_validate_input") val textValidateInput: Boolean? = null,
+
+    // ActionType.PUZZLE_SOLVER
+    @ColumnInfo(name = "puzzle_detection_timeout_ms") val puzzleDetectionTimeoutMs: Long? = null,
+    @ColumnInfo(name = "puzzle_detection_threshold") val puzzleDetectionThreshold: Float? = null,
+    @ColumnInfo(name = "puzzle_area_bounds") val puzzleAreaBounds: String? = null,
+    @ColumnInfo(name = "puzzle_use_gemini_vision") val puzzleUseGeminiVision: Boolean? = null,
+    @ColumnInfo(name = "puzzle_gemini_api_key") val puzzleGeminiApiKey: String? = null,
+    @ColumnInfo(name = "puzzle_gemini_timeout_ms") val puzzleGeminiTimeoutMs: Long? = null,
+    @ColumnInfo(name = "puzzle_slider_start_x") val puzzleSliderStartX: Int? = null,
+    @ColumnInfo(name = "puzzle_slider_start_y") val puzzleSliderStartY: Int? = null,
+    @ColumnInfo(name = "puzzle_slider_end_x") val puzzleSliderEndX: Int? = null,
+    @ColumnInfo(name = "puzzle_slider_duration") val puzzleSliderDuration: Long? = null,
+    @ColumnInfo(name = "puzzle_animated_swipe") val puzzleAnimatedSwipe: Boolean? = null,
+    @ColumnInfo(name = "puzzle_swipe_steps") val puzzleSwipeSteps: Int? = null,
+    @ColumnInfo(name = "puzzle_retry_on_failure") val puzzleRetryOnFailure: Boolean? = null,
+    @ColumnInfo(name = "puzzle_max_retries") val puzzleMaxRetries: Int? = null,
+    @ColumnInfo(name = "puzzle_retry_delay_ms") val puzzleRetryDelayMs: Long? = null,
+    @ColumnInfo(name = "puzzle_validate_after_solve") val puzzleValidateAfterSolve: Boolean? = null,
+    @ColumnInfo(name = "puzzle_success_indicator_color") val puzzleSuccessIndicatorColor: String? = null,
+    @ColumnInfo(name = "puzzle_success_timeout_ms") val puzzleSuccessTimeoutMs: Long? = null,
 ) : EntityWithId
 
 /**

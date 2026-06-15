@@ -53,6 +53,8 @@ enum class ActionType {
     SYSTEM,
     /** Set the text of a focused view on the screen. */
     TEXT,
+    /** Automatically solve puzzles. */
+    PUZZLE_SOLVER,
 }
 
 

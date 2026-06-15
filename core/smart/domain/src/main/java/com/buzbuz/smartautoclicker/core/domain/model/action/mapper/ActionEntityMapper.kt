@@ -26,6 +26,7 @@ import com.buzbuz.smartautoclicker.core.domain.model.action.Click
 import com.buzbuz.smartautoclicker.core.domain.model.action.Intent
 import com.buzbuz.smartautoclicker.core.domain.model.action.Notification
 import com.buzbuz.smartautoclicker.core.domain.model.action.Pause
+import com.buzbuz.smartautoclicker.core.domain.model.action.PuzzleSolver
 import com.buzbuz.smartautoclicker.core.domain.model.action.SetText
 import com.buzbuz.smartautoclicker.core.domain.model.action.Swipe
 import com.buzbuz.smartautoclicker.core.domain.model.action.SystemAction
@@ -45,6 +46,7 @@ internal fun Action.toEntity(): ActionEntity {
         is Notification -> toNotificationEntity()
         is SystemAction -> toSystemActionEntity()
         is SetText -> toSetTextEntity()
+        is PuzzleSolver -> toPuzzleSolverEntity()
     }
 }
 
@@ -162,4 +164,31 @@ private fun SetText.toSetTextEntity(): ActionEntity =
         type = ActionType.TEXT,
         textValue = text,
         textValidateInput = validateInput,
+    )
+
+private fun PuzzleSolver.toPuzzleSolverEntity(): ActionEntity =
+    ActionEntity(
+        id = id.databaseId,
+        eventId = eventId.databaseId,
+        priority = priority,
+        name = name!!,
+        type = ActionType.PUZZLE_SOLVER,
+        puzzleDetectionTimeoutMs = detectionTimeoutMs,
+        puzzleDetectionThreshold = detectionThreshold,
+        puzzleAreaBounds = puzzleAreaBounds,
+        puzzleUseGeminiVision = useGeminiVision,
+        puzzleGeminiApiKey = geminiApiKey,
+        puzzleGeminiTimeoutMs = geminiTimeoutMs,
+        puzzleSliderStartX = sliderStartX,
+        puzzleSliderStartY = sliderStartY,
+        puzzleSliderEndX = sliderEndX,
+        puzzleSliderDuration = sliderDuration,
+        puzzleAnimatedSwipe = animatedSwipe,
+        puzzleSwipeSteps = swipeSteps,
+        puzzleRetryOnFailure = retryOnFailure,
+        puzzleMaxRetries = maxRetries,
+        puzzleRetryDelayMs = retryDelayMs,
+        puzzleValidateAfterSolve = validateAfterSolve,
+        puzzleSuccessIndicatorColor = successIndicatorColor,
+        puzzleSuccessTimeoutMs = successTimeoutMs,
     )

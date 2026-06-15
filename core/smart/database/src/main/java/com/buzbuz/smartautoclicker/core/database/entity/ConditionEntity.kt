@@ -84,6 +84,8 @@ data class ConditionEntity(
     @ColumnInfo(name = "detection_interval_ms", defaultValue = "500") val detectionIntervalMs: Long = 500L,
     @ColumnInfo(name = "required_detection_count", defaultValue = "1") val requiredDetectionCount: Int = 1,
     @ColumnInfo(name = "reset_after_trigger", defaultValue = "1") val resetAfterTrigger: Boolean = true,
+    @ColumnInfo(name = "use_custom_detection_interval", defaultValue = "0") val useCustomDetectionInterval: Boolean = false,
+    @ColumnInfo(name = "require_specific_detection_count", defaultValue = "0") val requireSpecificDetectionCount: Boolean = false,
 
     // ConditionType.ON_BROADCAST_RECEIVED
     @ColumnInfo(name = "broadcast_action") val broadcastAction: String? = null,

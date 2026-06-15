@@ -132,13 +132,19 @@
                 android:layout_marginHorizontal="@dimen/margin_horizontal_default"
                 android:layout_marginBottom="@dimen/margin_vertical_large">
 
-                <include layout="@layout/include_field_slider"
-                    android:id="@+id/field_slider_threshold"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                    android:layout_marginTop="@dimen/margin_vertical_large"
-                    android:layout_marginBottom="@dimen/margin_vertical_small"/>
+                    android:layout_marginVertical="@dimen/margin_vertical_large"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/include_field_slider"
+                        android:id="@+id/field_slider_threshold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -153,9 +159,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                    android:layout_marginTop="@dimen/margin_vertical_large"
-                    android:layout_marginBottom="@dimen/margin_vertical_small"
+                    android:layout_marginVertical="@dimen/margin_vertical_large"
                     android:orientation="vertical">
+
+                    <include layout="@layout/include_field_switch"
+                        android:id="@+id/field_use_custom_interval"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_custom_interval"
+                        style="@style/AppTheme.Widget.Divider.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
 
                     <include layout="@layout/include_field_slider"
                         android:id="@+id/field_slider_detection_interval"
@@ -167,12 +183,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
 
+                    <include layout="@layout/include_field_switch"
+                        android:id="@+id/field_require_specific_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_specific_count"
+                        style="@style/AppTheme.Widget.Divider.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
                     <include layout="@layout/include_field_slider"
                         android:id="@+id/field_slider_required_detection_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
                     <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_reset_after_trigger"
                         style="@style/AppTheme.Widget.Divider.Horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
