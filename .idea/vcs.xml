@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/smart-autoclicker-patched" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker" vcs="Git" />
   </component>
 </project>

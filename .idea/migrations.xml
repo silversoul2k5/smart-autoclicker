@@ -4,6 +4,7 @@
     <option name="MigrateToGradleLocalJavaHome">
       <set>
         <option value="$PROJECT_DIR$/smart-autoclicker-patched/smart-autoclicker" />
+        <option value="$PROJECT_DIR$" />
       </set>
     </option>
   </component>
